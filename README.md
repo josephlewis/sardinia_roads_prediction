@@ -6,7 +6,9 @@ Getting Started
 ---------------
 
 1. Open project using sardinia_roads_prediction.Rproj to ensure relative paths work.
-2. Run the _00_Main.R_ R script in the R folder to reproduce the analysis. This project uses the R package _targets_ so only necessarily files will be re-run
+2. Run the _00_Main.R_ R script in the R folder to reproduce the analysis. This project uses the R package _targets_ so only necessarily code will be re-run.
+
+**Code**
    * _001_Preprocess_dem.R_ preprocesses the Digital Elevation Model (DEM) used in the analysis.
    * _002_preprocess_routes.R_ preprocesses the Roman roads dataset into road segments
    * _003_preprocess_movement_factors.R_ preprocesses Roman road segments into data structure for modelling
