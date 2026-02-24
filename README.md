@@ -55,4 +55,3 @@ Please note that running the Bayesian (INLA) models via _004_fit_models.R_ can h
 License
 ---------------
 CC-BY 3.0 unless otherwise stated (see Licenses.md)
-
