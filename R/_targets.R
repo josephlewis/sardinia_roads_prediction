@@ -39,5 +39,11 @@ list(
     run_007
     source("./R/008_model_comparison_plot.R")
     "./R/008_model_comparison_plot.R"
+  }, format = "file"),
+  
+  tar_target(run_009, {
+    run_007
+    source("./R/009_model_plot_rank_pop2.R")
+    "./R/009_model_plot_rank_pop2.R"
   }, format = "file")
 )
