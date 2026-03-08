@@ -109,10 +109,10 @@ loocv_rank_counts_plot <- ggplot(loocv_overall_rank_counts, aes(x = factor(Rank)
   geom_bar(position = "dodge", stat = "identity") +
   geom_text(aes(label = sprintf("%.1f%%", percent_overall)), vjust = -0.5, size = 3) +
   geom_hline(yintercept = 12.5, linetype = "dashed", color = "black") +
-  annotate("text", x = 7.5, y = 12.5 + 1.15, 
-           label = paste0("Random Chance (", round(12.5,1), "%)"), 
-           color = "black", size = 3) +
-  labs(x = "Predicted rank of observed step", y = "Frequency (%)", title = "A") + 
+  # annotate("text", x = 7.5, y = 12.5 + 1.15, 
+  #          label = paste0("Random Chance (", round(12.5,1), "%)"), 
+  #          color = "black", size = 3) +
+  labs(x = "Predicted rank of observed step", y = "Frequency (%)", title = "B") + 
   scale_y_continuous(breaks = seq(0, 100, 5), limits = c(0,45)) +
   theme_clean() + 
   theme(strip.text = element_text(hjust = 0, size = 14, face = "bold"), strip.background = element_blank())
