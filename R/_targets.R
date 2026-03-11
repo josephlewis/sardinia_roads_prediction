@@ -45,5 +45,11 @@ list(
     run_007
     source("./R/009_model_plot_rank_pop2.R")
     "./R/009_model_plot_rank_pop2.R"
+  }, format = "file"),
+  
+  tar_target(run_010, {
+    run_007
+    source("./R/010_model_plots_mean_curve.R")
+    "./R/010_model_plots_mean_curve.R"
   }, format = "file")
 )
