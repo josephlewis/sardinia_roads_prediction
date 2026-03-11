@@ -39,7 +39,7 @@ calculate_slope <- function(x, y) {
     
     print(paste0("Calculating route mathematical slope gradients: ", y_indx, " of ", nrow(y)))
     
-    # --- 1. Densify Points & Identify Cells (Existing Logic) ---
+    # densify points and identify cells
     if(sf::st_is_longlat(y)) {
       y_dens <- sf::st_segmentize(y[y_indx,], dfMaxLength = units::set_units(max(terra::res(x))/10, degrees))
     } else {
@@ -55,14 +55,13 @@ calculate_slope <- function(x, y) {
     # Remove destination cell for the 'from' list
     y_cells2 <- y_cells[-length(y_cells)]
     
-    # --- 2. THE FIX: Create Sequence Map based on Path Order ---
-    # We map every 'from' cell to its step number (1, 2, 3...) BEFORE doing any spatial sorting
+    # Map every 'from' cell to its step number before doing any spatial sorting
     step_map <- data.frame(
       from = y_cells2,
       from_unique_id = 1:length(y_cells2)
     )
     
-    # --- 3. Calculate Adjacency & Slopes (Existing Logic) ---
+    # calculate adjacency and slope gradients
     adj <- terra::adjacent(x = x, y_cells2, directions = 8, pairs = TRUE, symmetrical = FALSE)
     adj <- data.frame(adj)
     
@@ -75,26 +74,21 @@ calculate_slope <- function(x, y) {
     run <- calculate_distance_geosphere(x = x, adj = adj)
     mathematical_slope <- rise/run
     
-    # --- 4. Identify the "True Path" Choice ---
+    # identify selected steps
     y_matrix <- data.frame(cbind(head(y_cells, -1), tail(y_cells, -1)))
     colnames(y_matrix) <- c("from", "to")
     y_matrix$in_adj <- 1
     
-    # --- 5. Merge Data & Apply the Sequence ID ---
-    adj <- adj %>%
-      # A. Mark the true path
+      adj <- adj %>%
       left_join(y_matrix, by = c("from", "to")) %>%
       mutate(in_adj = ifelse(is.na(in_adj), 0, 1)) %>%
-      # B. THE FIX: Attach the step sequence ID using the map we made in Step 2
-      # This ensures ID 1 is the Origin, ID 2 is the next step, etc.
       left_join(step_map, by = "from")
     
-    # --- 6. Construct the Result Dataframe ---
     dem_slopes[[y_indx]] <- data.frame(
       route_ID = y_indx, 
       from = adj$from, 
       to = adj$to, 
-      from_unique_id = adj$from_unique_id, # Now included correctly
+      from_unique_id = adj$from_unique_id, 
       in_adj = adj$in_adj, 
       from_xy, 
       to_xy, 
@@ -103,8 +97,7 @@ calculate_slope <- function(x, y) {
       mathematical_slope = mathematical_slope
     ) %>%
       filter(!is.na(mathematical_slope))
-    
-    # Handle empty results (e.g. if route is too short/outside raster)
+  
     if(nrow(dem_slopes[[y_indx]]) == 0) { 
       dem_slopes[[y_indx]] <- data.frame(
         route_ID = y_indx, from = NA, from_unique_id = NA, to = NA, in_adj = NA, 
@@ -113,29 +106,23 @@ calculate_slope <- function(x, y) {
       )
     }
     
-    # Attach extra columns from the original sf object if present
+    # attach extra columns from the original sf object if present
     if(length(colnames(y)) > 1) { 
       dem_slopes[[y_indx]] <- cbind(dem_slopes[[y_indx]], as.vector(sf::st_drop_geometry(y[y_indx,])))
     }
   }
-  
-  # --- 7. Final Bind (Simplified) ---
-  # We removed the group_by/summarise block that was causing the sorting bug.
+
   dem_slopes2 <- do.call(rbind, dem_slopes)
-  
-  # B. Create the unique ID using the "Combined String" method
+
   dem_slopes2 <- dem_slopes2 %>%
-    # Ensure it is sorted by Route then Local Step so the IDs increase logically
     arrange(route_ID, from_unique_id) %>% 
     mutate(
-      # 1. Create a unique string key for every step (e.g. "1_1", "1_2", "2_1")
+      # Create a unique string key for every step (e.g. "1_1", "1_2", "2_1")
       combined_id = paste(route_ID, from_unique_id, sep = "_"),
       
-      # 2. Match that string against the unique list of strings to get an integer
       #    match() returns the index of the first match, so "1_1" becomes 1, "2_1" becomes 50, etc.
       from_unique_id = match(combined_id, unique(combined_id))
     ) %>%
-    # Remove the temp column
     select(-combined_id)
   
   row.names(dem_slopes2) <- 1:nrow(dem_slopes2)
@@ -157,19 +144,15 @@ wt_cf <- function(x, crit_slope) {
 
 get_rw2_curve_pop <- function(sample, random_effect_name, x_values_map) {
   
-  # A. Find indices for this effect (e.g., "Slope:1", "Slope:2")
-  # "Slope" is the name you defined in the formula: Slope = rw2(...)
+  # Find indices for this effect (e.g., "Slope:1", "Slope:2")
   idx <- which(startsWith(rownames(sample$latent), paste0(random_effect_name, ":")))
   
-  # B. Extract y-values (the cost/weight)
   y_values <- sample$latent[idx, 1]
   
-  # Safety Check: Ensure lengths match
   if(length(y_values) != length(x_values_map)) {
     stop(paste("Mismatch! Model has", length(y_values), "nodes but map has", length(x_values_map), "values."))
   }
-  
-  # C. Return as dataframe
+
   return(data.frame(x = x_values_map, y = y_values))
 }
 
@@ -185,10 +168,9 @@ get_iid_coefs <- function(sample, random_effect_name, n_groups) {
   idx <- which(startsWith(rownames(sample$latent), paste0(random_effect_name, ":")))
   coefs <- sample$latent[idx, 1]
   
-  # Safety check
   if(length(coefs) != n_groups) stop(paste("Expected", n_groups, "coeffs, got", length(coefs)))
   
-  return(coefs) # Returns a vector of betas
+  return(coefs)
 }
 
 calculate_distance <- function(x, adj) { 
@@ -217,52 +199,4 @@ calculate_distance <- function(x, adj) {
   
   return(dist)
   
-}
-
-slope_calc <- function(x, exaggeration = FALSE, neighbours) {
-  
-  neighbours <- leastcostpath::neighbourhood(neighbours = neighbours)
-
-  cells <- which(!is.na(terra::values(x)))
-  na_cells <- which(is.na(terra::values(x)))
-  
-  adj <- terra::adjacent(x = x, cells = cells, directions = neighbours, pairs = TRUE)
-  adj <- adj[!adj[,2] %in% na_cells,]
-  
-  elev_values <- terra::values(x)[,1]
-  
-  message("calculating slope...")
-  
-  rise <- (elev_values[adj[,2]] - elev_values[adj[,1]])
-  run <- calculate_distance(x = x, adj = adj)
-  
-  mathematical_slope <- rise/run
-  
-  if(exaggeration) { 
-    mathematical_slope <- ifelse(mathematical_slope > 0, mathematical_slope * 1.99, mathematical_slope * 2.31)
-  }
-  
-  ncells <- length(cells) + length(na_cells)
-  
-  rm(elev_values, rise, run)
-  gc()
-  
-  cs_matrix <- Matrix::Matrix(data = 0, nrow = ncells, ncol = ncells, sparse = TRUE)
-  cs_matrix[adj] <- mathematical_slope
-  
-  cs <- list("conductanceMatrix" = cs_matrix, 
-             "costFunction" = NA,
-             "maxSlope" = NA, 
-             "exaggeration" = exaggeration,
-             "criticalSlope" = NA,
-             "neighbours" = sum(neighbours, na.rm = TRUE),
-             "resolution" = terra::res(x), 
-             "nrow" = terra::nrow(x), 
-             "ncol" = terra::ncol(x), 
-             "extent" = as.vector(terra::ext(x)), 
-             "crs" = terra::crs(x, proj = TRUE))
-  
-  class(cs) <- "conductanceMatrix"
-  
-  return(cs)
 }
