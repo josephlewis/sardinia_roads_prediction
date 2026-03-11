@@ -1,6 +1,3 @@
-library(data.table)
-library(ggplot2)
-
 INLA::inla.setOption(num.threads = 1)
 
 set.seed(NULL)
@@ -54,8 +51,6 @@ ggsave(plot = pop_rw2_mean_rank_plot, "./Output/Figures/pop_rw2_mean_rank_plot.s
 
 slope_vals <- seq(-45, 45, 0.1)
 
-# 3. Map your Mean RW2 (Symmetrical Mirroring)
-# Use the absolute value of x_range to pull from your mean_curve
 # calculate selection weights for slope values (absolute values since rw2 curve is symmetrical but do pos/neg slope for plot purposes)
 rw2_vals <- approx(x = mean_curve$ID, y = mean_curve$mean, xout = abs(slope_vals), rule = 2)$y
 
@@ -86,6 +81,3 @@ pop_curve_comparison_plot <- ggplot() +
 
 ggsave(plot = pop_curve_comparison_plot, "./Output/Figures/pop_curve_comparison_plot.png", dpi = 300, width = 14, height = 7)
 ggsave(plot = pop_curve_comparison_plot, "./Output/Figures/pop_curve_comparison_plot.svg", dpi = 300, width = 14, height = 7)
-
-
-
