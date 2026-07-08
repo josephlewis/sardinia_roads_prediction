@@ -19,3 +19,14 @@ get_rw2_curve_pop|function|bb52fbd63110cd71
 tobler_cf|function|ff81e0d25ee19b66
 slope_calc|function|11ef189edb2c2cfc
 calculate_slope|function|3351e751cc7b2569
+calculate_distance|function|2a4e8cc34d30b85e
+slope2deg|function|7218f5f5b2fe3c4b
+deg2slope|function|a915cb8c7efa1351
+wt_cf|function|f8acd2e1d5e9db8d
+get_rw2_curve_re|function|ca3bae591da8437b
+get_iid_coefs|function|6f0486fbf2a616fe
+calculate_distance_geosphere|function|009e21a7c5725bdf
+herzog_cf|function|30ae14724eda91ab
+get_rw2_curve_pop|function|bb52fbd63110cd71
+tobler_cf|function|ff81e0d25ee19b66
+calculate_slope|function|3351e751cc7b2569
