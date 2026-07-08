@@ -2,23 +2,15 @@ name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iterat
 run_009|stem|143246f0c1cc30a0|ea62f66e73cf8c2d|10ac600881b03f23|-1519210134|./R/2026_02_03/009_model_comparison_plot.R|t20500.5431309578s|s3493b|3493|file|local|vector|||3.579||
 run_010|stem|fc08cb92a142e875|08142b419726d70d|bd2611fe11dbdf15|-1557151290|./R/2026_02_03/010_selection_surfaces_pop.R|t20500.6393173542s|s4312b|4312|file|local|vector|||510.528||
 run_011|stem|0a36d3d40d62f783|27f0f0c8d492ca94|bd2611fe11dbdf15|-987256726|./R/2026_02_03/011_selection_surfaces_new_re.R|t20500.843319505s|s4928b|4928|file|local|vector|||499.413||
-run_004|stem|a88ace392d3d534b|f7c646dcb7a36ec3|2c530c1562a7fbd1|1092262732|./R/004_fit_models.R|t20507.4044680327s|s2201b|2201|file|local|vector|||438.71|URL 'https://inla.r-inla-download.org/VERSIONS': status was 'SSL peer certificate or SSH remote key was not OK'|
-run_005|stem|dfe13f59133341c4|721c8bdec03cc1a0|55f390120969ac17|-852834889|./R/005_model_plot_rw2.R|t20507.406281586s|s8369b|8369|file|local|vector|||508.506||
 run_006|stem|90abc5ecfc6e4ac6|319abdbf029a2fae|8cdc1d94005920a4|1195039787|./R/006_model_plot_rank_pop.R|t20507.3916970643s|s2686b|2686|file|local|vector|||3495.75||
 run_007|stem|d7dd6730b3befc19|8cf5cd31d7e64b5d|76aa5f272a8925d3|-491264108|./R/007_model_plot_rank_re.R|t20507.3920785689s|s3092b|3092|file|local|vector|||2879.496||
 run_008|stem|143246f0c1cc30a0|d78359d5a266d965|829ed452271b93dd|-1403455131|./R/008_model_comparison_plot.R|t20500.5431309578s|s3493b|3493|file|local|vector|||3.987||
-calculate_distance|function|2a4e8cc34d30b85e
-slope2deg|function|7218f5f5b2fe3c4b
-deg2slope|function|a915cb8c7efa1351
-wt_cf|function|f8acd2e1d5e9db8d
-get_rw2_curve_re|function|ca3bae591da8437b
-get_iid_coefs|function|6f0486fbf2a616fe
-calculate_distance_geosphere|function|009e21a7c5725bdf
-herzog_cf|function|30ae14724eda91ab
-get_rw2_curve_pop|function|bb52fbd63110cd71
-tobler_cf|function|ff81e0d25ee19b66
 slope_calc|function|11ef189edb2c2cfc
-calculate_slope|function|3351e751cc7b2569
+run_001|stem|e92c8344d5e7f986|35baa83073c3175d|2c530c1562a7fbd1|-2096082983|./R/001_Preprocess_dem.R|t20642.4564731116s|s981b|981|file|local|vector|||6.039|repeating attributes for all sub-geometries for which they may not be constant. repeating attributes for all sub-geometries for which they may not be constant|
+run_002|stem|ec487b1184f0d233|30705164ebbf7d2c|6a802c176f6022ef|885450593|./R/002_preprocess_routes.R|t20500.5379608443s|s896b|896|file|local|vector|||0.184|repeating attributes for all sub-geometries for which they may not be constant. number of items to replace is not a multiple of replacement length. st_network_blend assumes attributes are constant over geometries. to_spatial_subdivision assumes attributes are constant over geometries|
+run_003|stem|90f686a480bed601|63114880c396c21a|55f853323b3bc21d|2103568563|./R/003_preprocess_movement_factors.R|t20642.4568973239s|s4895b|4895|file|local|vector|||21.488||
+run_004|stem|6bf9afaef81c2adf|dadc10acdaa682eb|79f5dc5ce95b8046|1092262732|./R/004_fit_model.R|t20642.455954594s|s1268b|1268|file|local|vector|||118.833||
+run_005|stem|af19d9654f79028a|d50c3e279f9ca885|4e53caa1b3fbebe9|-852834889|./R/005_model_plots.R|t20642.456169964s|s8468b|8468|file|local|vector|||229.404||
 calculate_distance|function|2a4e8cc34d30b85e
 slope2deg|function|7218f5f5b2fe3c4b
 deg2slope|function|a915cb8c7efa1351
@@ -29,4 +21,4 @@ calculate_distance_geosphere|function|009e21a7c5725bdf
 herzog_cf|function|30ae14724eda91ab
 get_rw2_curve_pop|function|bb52fbd63110cd71
 tobler_cf|function|ff81e0d25ee19b66
-calculate_slope|function|3351e751cc7b2569
+calculate_slope|function|2a9ad7fa8358b2f3

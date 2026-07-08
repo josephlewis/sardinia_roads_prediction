@@ -110,6 +110,19 @@ calculate_slope <- function(x, y) {
     if(length(colnames(y)) > 1) { 
       dem_slopes[[y_indx]] <- cbind(dem_slopes[[y_indx]], as.vector(sf::st_drop_geometry(y[y_indx,])))
     }
+  
+    preceding_steps <- dem_slopes[[y_indx]] %>%
+      filter(in_adj == 1) %>%
+      select(from_unique_id, prev_x = from_x, prev_y = from_y) %>%
+      mutate(target_unique_id = from_unique_id + 1)
+    
+    # 2. Join and filter out the backtracking alternative
+    dem_slopes[[y_indx]] <- dem_slopes[[y_indx]] %>%
+      left_join(preceding_steps, by = c("from_unique_id" = "target_unique_id")) %>%
+      filter(is.na(prev_x) | !(to_x == prev_x & to_y == prev_y)) %>%
+      select(-prev_x, -prev_y) %>%
+      filter(from_unique_id != 1)
+
   }
 
   dem_slopes2 <- do.call(rbind, dem_slopes)
@@ -126,7 +139,7 @@ calculate_slope <- function(x, y) {
     select(-combined_id)
   
   row.names(dem_slopes2) <- 1:nrow(dem_slopes2)
-  
+
   return(dem_slopes2)
 }
 

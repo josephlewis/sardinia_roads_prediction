@@ -12,44 +12,31 @@ tar_option_set(
 tar_source("./R/000_Functions.R")
 
 list(
+  tar_target(run_001, {
+    source("./R/001_Preprocess_dem.R")
+    "./R/001_Preprocess_dem.R" 
+  }, format = "file"),
+  
+  tar_target(run_002, {
+    run_001
+    source("./R/002_preprocess_routes.R")
+    "./R/002_preprocess_routes.R"
+  }, format = "file"),
+  
+  tar_target(run_003, {
+    run_002
+    source("./R/003_preprocess_movement_factors.R")
+    "./R/003_preprocess_movement_factors.R"
+  }, format = "file"),
+  
   tar_target(run_004, {
-    source("./R/004_fit_models.R")
-    "./R/004_fit_models.R" 
+    run_003 
+    source("./R/004_fit_model.R")
+    "./R/004_fit_model.R"
   }, format = "file"),
   
   tar_target(run_005, {
-    run_005
-    source("./R/005_model_plot_rw2.R")
-    "./R/005_model_plot_rw2.R"
-  }, format = "file"),
-  
-  tar_target(run_006, {
-    run_006 
-    source("./R/006_model_plot_rank_pop.R")
-    "./R/006_model_plot_rank_pop.R"
-  }, format = "file"),
-  
-  tar_target(run_007, {
-    run_007
-    source("./R/007_model_plot_rank_re.R")
-    "./R/007_model_plot_rank_re.R"
-  }, format = "file"),
-  
-  tar_target(run_008, {
-    run_008
-    source("./R/008_model_comparison_plot.R")
-    "./R/008_model_comparison_plot.R"
-  }, format = "file"),
-  
-  tar_target(run_009, {
-    run_009
-    source("./R/009_model_plot_rank_pop2.R")
-    "./R/009_model_plot_rank_pop2.R"
-  }, format = "file"),
-  
-  tar_target(run_010, {
-    run_010
-    source("./R/010_model_plots_mean_curve.R")
-    "./R/010_model_plots_mean_curve.R"
-  }, format = "file")
-)
+    run_004
+    source("./R/005_model_plots.R")
+    "./R/005_model_plots.R"
+  }, format = "file"))
